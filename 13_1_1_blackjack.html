@@ -1,0 +1,81 @@
+<meta charset = "utf-8">
+<script>
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+    
+    function getCard() {
+        var cards = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        return cards[getRandomInt(0, cards.length)];
+    }
+    
+    function getSum(arr) {
+        var sum = 0;
+        for (var i=0; i<arr.length; i++){
+            if (isNaN(parseInt(arr[i])) == false) {
+                sum += parseInt(arr[i]);
+            } else {
+                if (arr[i] != "A") {
+                    sum += 10;
+                }
+            }
+        }
+        
+        for (var i=0;i<arr.length;i++) {
+            if (arr[i] == "A") {
+                if (sum > 10) {
+                    sum += 1;
+                } else {
+                    sum += 11;
+                }
+            }
+        }
+        return sum;
+    }
+    
+    function getStatus() {
+        return "Дилер: " + dealer.join(" ") + "\nИгрок: " + player.join(" ") + "\nУ дилера " + getSum(dealer) + " очков." +"\nУ игрока " + getSum(player) + " очков.";
+    }
+    
+    function PlayBlackJack() {
+        dealer = [getCard()];
+        player = [getCard(), getCard()];
+        var answer = "";
+        do {
+            answer = "";
+            if (getSum(player) == 21) {
+                alert(getStatus() + "\nУ вас блэкджек!");
+            } else if (getSum(player) > 21) {
+                alert(getStatus() + "\nВы проиграли!");
+                break;
+            } else {
+                answer = prompt(getStatus() + "\nБерешь еще карту? (1 - да)");
+            }
+            if (answer == "1") {
+                player.push(getCard());
+            } else {
+                while (getSum(dealer) < 17) {
+                    dealer.push(getCard());
+                } 
+                if (getSum(dealer) > 21) {
+                    alert(getStatus() + "\nУ дилера перебор, Вы выиграли!");
+                } else if (getSum(dealer) == getSum(player)){
+                    alert(getStatus() + "\nУ вас равное количество очков, ничья!");
+                } else if (getSum(dealer) < getSum(player)) {
+                    alert(getStatus() + "\nУ вас больше очков, Вы выиграли!");
+                } else {
+                    alert(getStatus() + "\nУ вас меньше очков, Вы проиграли!");
+                }
+            }
+        } while (answer == "1")
+    }
+    
+    var answer = "";
+    var dealer;
+    var player;
+    do {
+        PlayBlackJack();
+        answer = prompt("Сыграть еще? (1 - да)")
+    } while (answer==1)
+    alert("Конец.");
+</script>
